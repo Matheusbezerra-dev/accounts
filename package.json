@@ -1,0 +1,27 @@
+{
+  "name": "accounts",
+  "version": "1.0.0",
+  "description": "Primeiro projeto em node.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Matheusbezerra-dev/accounts.git"
+  },
+  "keywords": [
+    "node.js",
+    "typescript"
+  ],
+  "author": "Matheus Bezerra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Matheusbezerra-dev/accounts/issues"
+  },
+  "homepage": "https://github.com/Matheusbezerra-dev/accounts#readme",
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "inquirer": "^9.1.4"
+  }
+}
