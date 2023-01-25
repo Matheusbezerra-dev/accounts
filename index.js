@@ -14,6 +14,22 @@ const check = (accountName) => {
     }
     return true;
 };
+const getAccount = (accountName) => {
+    const accountJSON = fs_1.default.readFileSync(`accounts/${accountName}.json`, {
+        encoding: 'UTF8',
+        flag: 'r',
+    });
+    return JSON.parse(accountJSON);
+};
+const addAmount = (accountName, amount) => {
+    const accountData = getAccount(accountName);
+    if (!amount) {
+        console.log(chalk_1.default.bgRed.black('Ocorreu um erro, tente novamente!'));
+    }
+    accountData.balance = parseFloat(amount) + parseFloat(accountData.balance);
+    fs_1.default.writeFileSync(`accounts/${accountName}.json`, JSON.stringify(accountData));
+    console.log(chalk_1.default.green(`Foi depositado o valor de R$${amount},00 na sua conta`));
+};
 const deposit = () => {
     inquirer_1.default.prompt([{
             name: 'accountName',
@@ -24,13 +40,22 @@ const deposit = () => {
         if (!check(accountName)) {
             return deposit();
         }
+        inquirer_1.default.prompt([{
+                name: 'amount',
+                message: 'Quanto você deseja depositar?'
+            }])
+            .then((answer) => {
+            const amount = answer['amount'];
+            addAmount(accountName, amount);
+            operation();
+        });
     })
         .catch((err) => { console.log(err); });
 };
 const buildAccount = () => {
     inquirer_1.default.prompt([{
             name: 'accountName',
-            message: 'Digite um nome para a sua conta',
+            message: 'Digite um nome para a sua conta?',
         }]).then((answer) => {
         const accountName = answer['accountName'];
         console.info(accountName);
