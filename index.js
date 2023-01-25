@@ -25,6 +25,7 @@ const buildAccount = () => {
         if (fs_1.default.existsSync(`accounts/${accountName}.json`)) {
             console.log(chalk_1.default.bgRed.black('Esta conta ja Existe, escolha outro nome!'));
             buildAccount();
+            return;
         }
         ;
         fs_1.default.writeFileSync(`accounts/${accountName}.json`, '{"balance": 0}');
