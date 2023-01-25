@@ -7,6 +7,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
 const inquirer_1 = __importDefault(require("inquirer"));
 const fs_1 = __importDefault(require("fs"));
+const removeAmount = (accountName, amount) => {
+    const accountData = getAccount(accountName);
+    if (!amount) {
+        console.log(chalk_1.default.bgRed.black('Ocorreu um erro tente novamente'));
+        return widthdraw();
+    }
+    ;
+    if (accountData.balance < amount) {
+        console.log(chalk_1.default.bgRed.black('valor indisponivel!'));
+        return widthdraw();
+    }
+    ;
+    accountData.balance = parseFloat(accountData.balance) - parseFloat(amount);
+    fs_1.default.writeFileSync(`accounts/${accountName}.json`, JSON.stringify(accountData));
+    console.log(chalk_1.default.green(`Foi Realizado um saque de R$${amount},00 da sua conta`));
+    operation();
+};
+const widthdraw = () => {
+    inquirer_1.default.prompt([{
+            name: 'accountName',
+            message: 'qual o nome da sua conta'
+        }])
+        .then((ansewer) => {
+        const accountName = ansewer['accountName'];
+        if (!check(accountName)) {
+            return widthdraw();
+        }
+        inquirer_1.default.prompt([{
+                name: 'amount',
+                message: 'qual o valor que deseja sacar?',
+            }])
+            .then((ansewer) => {
+            const amount = ansewer['amount'];
+            removeAmount(accountName, amount);
+        })
+            .catch((err) => console.log(err));
+    })
+        .catch((err) => console.log(err));
+};
 const getBalance = () => {
     inquirer_1.default.prompt([{
             name: 'accountName',
@@ -122,6 +161,7 @@ const operation = () => {
             deposit();
         }
         if (action === 'Sacar') {
+            widthdraw();
         }
         if (action === 'Sair') {
             console.log(chalk_1.default.bgBlue.black('Obrigado por usar o Account!'));
