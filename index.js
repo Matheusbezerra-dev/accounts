@@ -6,13 +6,36 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //modulos externos
 const chalk_1 = __importDefault(require("chalk"));
 const inquirer_1 = __importDefault(require("inquirer"));
+const fs_1 = __importDefault(require("fs"));
 // const inquirer: any= require("inquirer");sdsadsa
 // const chalk: any= require('chalk');
 //modulo internos
 // const fs: any= require('fs');
+const ERRO = (err) => console.log(err);
+const buildAccount = () => {
+    inquirer_1.default.prompt([{
+            name: 'accountName',
+            message: 'Digite um nome para a sua conta',
+        }]).then((answer) => {
+        const accountName = answer['accountName'];
+        console.info(accountName);
+        if (!fs_1.default.existsSync('accounts')) {
+            fs_1.default.mkdirSync('accounts');
+        }
+        if (fs_1.default.existsSync(`accounts/${accountName}.json`)) {
+            console.log(chalk_1.default.bgRed.black('Esta conta ja Existe, escolha outro nome!'));
+            buildAccount();
+        }
+        ;
+        fs_1.default.writeFileSync(`accounts/${accountName}.json`, '{"balance": 0}');
+        console.log(chalk_1.default.green('Parabéns, a sua conta foi criada!'));
+        operation();
+    }).catch((err) => console.log(err));
+};
 const createAccount = () => {
     console.log(chalk_1.default.bgGreen.black('Parabéns por escolher o nosso banco!'));
     console.log(chalk_1.default.green('Defina as opções da sua conta a seguir.'));
+    buildAccount();
 };
 const operation = () => {
     inquirer_1.default.prompt([{
