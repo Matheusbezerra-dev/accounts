@@ -187,11 +187,11 @@ const operation = (): void => {
           break;
         case 'Sacar':
           widthdraw();
-          break;      
+          break;
         default:
-        console.log(chalk.bgBlue.black('Obrigado por usar o Account!'));
-        process.exit();
-      };    
+          console.log(chalk.bgBlue.black('Obrigado por usar o Account!'));
+          process.exit();
+      };
     })
     .catch((err: any): any => { console.log(err) });
 }
