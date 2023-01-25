@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Primeiro projeto em node.js.",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "jest",
     "start": "node index.js"
@@ -22,10 +23,13 @@
   },
   "homepage": "https://github.com/Matheusbezerra-dev/accounts#readme",
   "dependencies": {
-    "chalk": "^5.2.0",
-    "inquirer": "^9.1.4"
+    "chalk": "^5.2.0"
   },
   "devDependencies": {
-    "@types/node": "^18.11.18"
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^18.11.18",
+    "inquirer": "^8.0.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1"
   }
 }
