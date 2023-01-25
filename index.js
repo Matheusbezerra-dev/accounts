@@ -7,11 +7,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
 const inquirer_1 = __importDefault(require("inquirer"));
 const fs_1 = __importDefault(require("fs"));
+const getBalance = () => {
+    inquirer_1.default.prompt([{
+            name: 'accountName',
+            message: 'Qual o nome da sua conta?',
+        }])
+        .then((answer) => {
+        const accountName = answer['accountName'];
+        if (!check(accountName)) {
+            return getBalance();
+        }
+        ;
+        const accountData = getAccount(accountName);
+        console.log(chalk_1.default.bgBlue.black(`Olá, o saldo da sua conta é de R$${accountData.balance}`));
+        operation();
+    })
+        .catch((err) => console.log(err));
+};
 const check = (accountName) => {
     if (!fs_1.default.existsSync(`accounts/${accountName}.json`)) {
         console.log(chalk_1.default.bgRed.black('Esta conta não existe, escolha outro nome!'));
         return false;
     }
+    ;
     return true;
 };
 const getAccount = (accountName) => {
@@ -74,7 +92,7 @@ const buildAccount = () => {
     }).catch((err) => { console.log(err); });
 };
 const createAccount = () => {
-    console.log(chalk_1.default.bgGreen.black('Parabéns por escolher o nosso banco!'));
+    console.log(chalk_1.default.bgGreen.black('OObrigado por escolher o nosso banco!'));
     console.log(chalk_1.default.green('Defina as opções da sua conta a seguir.'));
     buildAccount();
 };
@@ -98,6 +116,7 @@ const operation = () => {
         }
         ;
         if (action === 'Consultar Saldo') {
+            getBalance();
         }
         if (action === 'Depositar') {
             deposit();

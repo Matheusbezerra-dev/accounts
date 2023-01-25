@@ -3,16 +3,37 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import fs from 'fs';
 
+const getBalance = (): void => {
+  inquirer.prompt([{
+    name: 'accountName' as string,
+    message: 'Qual o nome da sua conta?' as string,
+  }])
+  .then((answer) => {
+    const accountName = answer['accountName'];
+
+    if(!check(accountName)) {
+      return getBalance();
+    };
+    const accountData: any = getAccount(accountName);
+
+    console.log(chalk.bgBlue.black(
+      `Olá, o saldo da sua conta é de R$${accountData.balance}`
+    ));
+    operation();
+  })
+  .catch((err) => console.log(err))
+};
+
 const check = (accountName: string): boolean => {
   if(!fs.existsSync(`accounts/${accountName}.json`)){
     console.log(chalk.bgRed.black('Esta conta não existe, escolha outro nome!'));
     return false
-  }
+  };
   return true
-}
+};
 const getAccount = (accountName: string) => {
   const accountJSON = fs.readFileSync(`accounts/${accountName}.json`, {
-    encoding: 'UTF8' as string,
+    encoding: 'UTF8' as BufferEncoding,
     flag: 'r' as string,
   });
   return JSON.parse(accountJSON);
@@ -40,7 +61,7 @@ const deposit = (): void => {
     name: 'accountName' as string,
     message: 'Qual o nome da sua conta' as string,
   }])
-  .then((answer: any): void => {    
+  .then((answer): void => {    
     const accountName: string = answer['accountName'];   
   
     if(!check(accountName)){
@@ -92,7 +113,7 @@ const buildAccount = (): void => {
 };
 
 const createAccount = (): void => {
-  console.log(chalk.bgGreen.black('Parabéns por escolher o nosso banco!') as string);
+  console.log(chalk.bgGreen.black('OObrigado por escolher o nosso banco!') as string);
   console.log(chalk.green('Defina as opções da sua conta a seguir.') as string);
   buildAccount();
 };
@@ -116,7 +137,7 @@ const operation = (): void => {
       createAccount()
     };
     if(action === 'Consultar Saldo') {
-
+      getBalance()
     }
     if(action === 'Depositar') {
       deposit();
