@@ -7,11 +7,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chalk_1 = __importDefault(require("chalk"));
 const inquirer_1 = __importDefault(require("inquirer"));
 const fs_1 = __importDefault(require("fs"));
-// const inquirer: any= require("inquirer");sdsadsa
-// const chalk: any= require('chalk');
-//modulo internos
-// const fs: any= require('fs');
-const ERRO = (err) => console.log(err);
+const check = (accountName) => {
+    if (!fs_1.default.existsSync(`accounts/${accountName}.json`)) {
+        console.log(chalk_1.default.bgRed.black('Esta conta não existe, escolha outro nome!'));
+        return false;
+    }
+    return true;
+};
+const deposit = () => {
+    inquirer_1.default.prompt([{
+            name: 'accountName',
+            message: 'Qual o nome da sua conta',
+        }])
+        .then((answer) => {
+        const accountName = answer['accountName'];
+        if (!check(accountName)) {
+            return deposit();
+        }
+    })
+        .catch((err) => { console.log(err); });
+};
 const buildAccount = () => {
     inquirer_1.default.prompt([{
             name: 'accountName',
@@ -31,7 +46,7 @@ const buildAccount = () => {
         fs_1.default.writeFileSync(`accounts/${accountName}.json`, '{"balance": 0}');
         console.log(chalk_1.default.green('Parabéns, a sua conta foi criada!'));
         operation();
-    }).catch((err) => console.log(err));
+    }).catch((err) => { console.log(err); });
 };
 const createAccount = () => {
     console.log(chalk_1.default.bgGreen.black('Parabéns por escolher o nosso banco!'));
@@ -47,7 +62,7 @@ const operation = () => {
                 'Criar conta',
                 'Consultar Saldo',
                 'Depositar',
-                'sacar',
+                'Sacar',
                 'Sair',
             ],
         }])
@@ -56,7 +71,19 @@ const operation = () => {
         if (action === 'Criar conta') {
             createAccount();
         }
+        ;
+        if (action === 'Consultar Saldo') {
+        }
+        if (action === 'Depositar') {
+            deposit();
+        }
+        if (action === 'Sacar') {
+        }
+        if (action === 'Sair') {
+            console.log(chalk_1.default.bgBlue.black('Obrigado por usar o Account!'));
+            process.exit();
+        }
     })
-        .catch((err) => console.log(err));
+        .catch((err) => { console.log(err); });
 };
 operation();
