@@ -5,11 +5,11 @@ import fs from 'fs';
 
 const removeAmount = (accountName: string, amount: string): void => {
   const accountData: any = getAccount(accountName);
-  if(!amount) {
+  if (!amount) {
     console.log(chalk.bgRed.black('Ocorreu um erro tente novamente'));
     return widthdraw();
   };
-  if(accountData.balance < amount) {
+  if (accountData.balance < amount) {
     console.log(chalk.bgRed.black('valor indisponivel!'))
     return widthdraw();
   };
@@ -29,18 +29,18 @@ const widthdraw = (): void => {
   }])
     .then((ansewer) => {
       const accountName = ansewer['accountName']
-      if(!check(accountName)) {
+      if (!check(accountName)) {
         return widthdraw();
       }
       inquirer.prompt([{
         name: 'amount',
         message: 'qual o valor que deseja sacar?',
       }])
-      .then((ansewer) => {
-        const amount = ansewer['amount'];
-        removeAmount(accountName, amount);        
-      })
-      .catch((err) => console.log(err));
+        .then((ansewer) => {
+          const amount = ansewer['amount'];
+          removeAmount(accountName, amount);
+        })
+        .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 };
@@ -175,22 +175,23 @@ const operation = (): void => {
   }])
     .then((answer: any) => {
       const action: string = answer['action']
-      if (action === 'Criar conta') {
-        createAccount()
-      };
-      if (action === 'Consultar Saldo') {
-        getBalance()
-      }
-      if (action === 'Depositar') {
-        deposit();
-      }
-      if (action === 'Sacar') {
-        widthdraw();
-      }
-      if (action === 'Sair') {
+      switch (action) {
+        case 'Criar conta':
+          createAccount()
+          break;
+        case 'Consultar Saldo':
+          getBalance()
+          break;
+        case 'Depositar':
+          deposit();
+          break;
+        case 'Sacar':
+          widthdraw();
+          break;      
+        default:
         console.log(chalk.bgBlue.black('Obrigado por usar o Account!'));
         process.exit();
-      }
+      };    
     })
     .catch((err: any): any => { console.log(err) });
 }

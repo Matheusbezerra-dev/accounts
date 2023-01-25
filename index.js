@@ -150,23 +150,24 @@ const operation = () => {
         }])
         .then((answer) => {
         const action = answer['action'];
-        if (action === 'Criar conta') {
-            createAccount();
+        switch (action) {
+            case 'Criar conta':
+                createAccount();
+                break;
+            case 'Consultar Saldo':
+                getBalance();
+                break;
+            case 'Depositar':
+                deposit();
+                break;
+            case 'Sacar':
+                widthdraw();
+                break;
+            default:
+                console.log(chalk_1.default.bgBlue.black('Obrigado por usar o Account!'));
+                process.exit();
         }
         ;
-        if (action === 'Consultar Saldo') {
-            getBalance();
-        }
-        if (action === 'Depositar') {
-            deposit();
-        }
-        if (action === 'Sacar') {
-            widthdraw();
-        }
-        if (action === 'Sair') {
-            console.log(chalk_1.default.bgBlue.black('Obrigado por usar o Account!'));
-            process.exit();
-        }
     })
         .catch((err) => { console.log(err); });
 };
